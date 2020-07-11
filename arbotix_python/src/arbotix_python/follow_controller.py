@@ -48,6 +48,11 @@ class FollowController(Controller):
         self.joints = rospy.get_param('~controllers/'+name+'/joints')
         self.index = rospy.get_param('~controllers/'+name+'/index', len(device.controllers))
         for joint in self.joints:
+            # a very important line right here
+            # self.device is the parent object (ArbotixROS that is created in arbotix_driver).
+            # it has an attribute "joints", which is a DynamixelServo Joint object, which have a number of attributes and fcns
+            # which are used by the ServoController object to write values to servo registers.
+            # this line is assigning this FollowController object to the attribute 'controller' of the DynamixelServo Joint object
             self.device.joints[joint].controller = self
 
         # action server

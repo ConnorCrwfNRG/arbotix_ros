@@ -2,3 +2,23 @@
 .project
 .cproject
 .pydevproject
+
+# Ignore Mac system files
+*.directory
+
+# kDevelop
+*.kdev_include_paths
+
+#PyCharm-related
+*.idea/
+
+#VScode-related, do some more research into why these c_cpp_properties.json and settings.json are set the way they are.
+*.vscode/
+
+#related to Connor's virtual environment using pipenv
+Pipfile
+Pipfile.lock
+.env
+
+# test photo captures
+photo_capture*

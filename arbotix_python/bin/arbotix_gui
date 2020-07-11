@@ -122,11 +122,14 @@ class controllerGUI(wx.Frame):
         # timer for output
         self.timer = wx.Timer(self, self.TIMER_ID)
         self.timer.Start(50)
-        wx.EVT_CLOSE(self, self.onClose)
-        wx.EVT_TIMER(self, self.TIMER_ID, self.onTimer)
+        self.Bind(wx.EVT_CLOSE, self.onClose)
+        self.Bind(wx.EVT_TIMER, self.onTimer, self.timer)
+        # wx.EVT_CLOSE(self, self.onClose)
+        # wx.EVT_TIMER(self, self.TIMER_ID, self.onTimer)
 
         # bind the panel to the paint event
-        wx.EVT_PAINT(self, self.onPaint)
+        self.Bind(wx.EVT_PAINT, self.onPaint)
+        # wx.EVT_PAINT(self, self.onPaint)
         self.dirty = 1
         self.onPaint()
 
@@ -200,7 +203,8 @@ class controllerGUI(wx.Frame):
 if __name__ == '__main__':
     # initialize GUI
     rospy.init_node('controllerGUI')
-    app = wx.PySimpleApp()
+    # app = wx.PySimpleApp()
+    app = wx.App(False)
     frame = controllerGUI(None, True)
     app.MainLoop()
 

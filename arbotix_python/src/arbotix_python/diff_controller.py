@@ -101,6 +101,13 @@ class DiffController(Controller):
             self.setup(self.Kp,self.Kd,self.Ki,self.Ko) 
     
     def update(self):
+        # Connor added
+        # print("Desired Velocities")
+        # print("Left")
+        # print(self.v_des_left)
+        # print("Right")
+        # print(self.v_des_right)
+        # print("\n") 
         now = rospy.Time.now()
         if now > self.t_next:
             elapsed = now - self.then
@@ -172,6 +179,7 @@ class DiffController(Controller):
             odom.twist.twist.angular.z = self.dr
             self.odomPub.publish(odom)
 
+
             if now > (self.last_cmd + rospy.Duration(self.timeout)):
                 self.v_des_left = 0
                 self.v_des_right = 0
@@ -182,23 +190,34 @@ class DiffController(Controller):
                     self.v_left += self.max_accel
                     if self.v_left > self.v_des_left:
                         self.v_left = self.v_des_left
+                    print("Left set < desired")
                 else:
                     self.v_left -= self.max_accel
                     if self.v_left < self.v_des_left:
                         self.v_left = self.v_des_left
+                    print("Left set > desired")
                 
                 if self.v_right < self.v_des_right:
                     self.v_right += self.max_accel
                     if self.v_right > self.v_des_right:
                         self.v_right = self.v_des_right
+                    print("Right set < desired")
                 else:
                     self.v_right -= self.max_accel
                     if self.v_right < self.v_des_right:
                         self.v_right = self.v_des_right
+                    print("Right set > desired")
+
                 self.write(self.v_left, self.v_right)
 
             self.t_next = now + self.t_delta
- 
+        # print("Set Velocities")
+        # print("Left")
+        # print(self.v_left)
+        # print("Right")
+        # print(self.v_right)
+        # print("\n")
+
     def shutdown(self):
         if not self.fake:
             self.write(0,0)
@@ -206,6 +225,8 @@ class DiffController(Controller):
     def cmdVelCb(self,req):
         """ Handle movement requests. """
         self.last_cmd = rospy.Time.now()
+        # print(req.linear.x)
+        # print(req.angular.z)
         if self.fake:
             self.dx = req.linear.x        # m/s
             self.dr = req.angular.z       # rad/s
